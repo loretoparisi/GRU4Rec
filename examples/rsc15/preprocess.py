@@ -3,14 +3,29 @@
 Created on Fri Jun 25 16:20:12 2015
 
 @author: Balázs Hidasi
+@lastmodified: Loreto Parisi (loretoparisi at gmail dot com)
 """
 
+import sys
+import os
 import numpy as np
 import pandas as pd
 import datetime as dt
 
-PATH_TO_ORIGINAL_DATA = '/path/to/clicks/dat/file/'
-PATH_TO_PROCESSED_DATA = '/path/to/store/processed/data/'
+# To redirect output to file
+class Logger(object):
+    def __init__(self, filename="Default.log"):
+        self.terminal = sys.stdout
+        self.log = open(filename, "a")
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)
+    def flush(self):
+        pass
+sys.stdout = Logger( os.environ['HOME' ] + '/theano.log' )
+
+PATH_TO_ORIGINAL_DATA = os.environ['HOME'] + '/'
+PATH_TO_PROCESSED_DATA = os.environ['HOME'] + '/'
 
 data = pd.read_csv(PATH_TO_ORIGINAL_DATA + 'yoochoose-clicks.dat', sep=',', header=None, usecols=[0,1,2], dtype={0:np.int32, 1:str, 2:np.int64})
 data.columns = ['SessionId', 'TimeStr', 'ItemId']
